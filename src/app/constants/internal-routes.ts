@@ -1,5 +1,5 @@
 const InternalRoutes = {
-    homePage: '',
+    homePage: 'home',
     usersPage: 'users',
     userDetailsPage: 'users/:id'
 }

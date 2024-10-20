@@ -19,10 +19,16 @@ export class UsersService {
   private userByIdSubject = new BehaviorSubject<User | null>(null);
   userById$: Observable<User | null> = this.userByIdSubject.asObservable();
 
+  private totalPages = new BehaviorSubject<number>(0);
+  totalPages$: Observable<number> = this.totalPages.asObservable();
+
   private loadingSubject = new BehaviorSubject<boolean>(false);
   loading$: Observable<boolean> = this.loadingSubject.asObservable();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+
+
+  }
 
   fetchUsers(page: number): void {
     if (this.usersByPage[page]) {
@@ -39,12 +45,15 @@ export class UsersService {
 
             this.usersByPage[page] = response.data;
 
+            this.totalPages.next(response.total_pages);
+
             this.usersSubject.next(response.data);
             this.loadingSubject.next(false);
           })
         )
         .subscribe();
     }
+
   }
 
   fetchUserById(userId: string): void {

@@ -4,6 +4,7 @@ import { UsersService } from '../../services/users.service';
 import { Observable } from 'rxjs';
 import { User } from '../../models/remote/entities/user';
 import { CommonModule } from '@angular/common';
+import InternalRoutes from '../../constants/internal-routes';
 
 @Component({
   selector: 'app-user-details',
@@ -17,6 +18,8 @@ export class UserDetailsComponent {
   id: string;
   user$!: Observable<User | null>;
   loading$!: Observable<boolean>;
+
+  routes = InternalRoutes;
 
   constructor(private route: ActivatedRoute, private usersService: UsersService) {
     this.id = '';

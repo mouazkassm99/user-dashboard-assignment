@@ -1,1 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.custom-btn {
+    @apply px-4 py-2 rounded-lg bg-black/80 text-white;
+    @apply hover:text-green-400 transition-all duration-300 hover:cursor-pointer;
+    @apply disabled:cursor-not-allowed disabled:text-gray-400;
+}

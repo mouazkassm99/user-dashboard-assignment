@@ -1,11 +1,23 @@
-<div>
-    <a [routerLink]="['/users']">
-        go back
-    </a>
-</div>
-<div *ngIf="loading$ | async">Loading...</div>
+<div class="max-w-[400px] mx-auto">
+    <div class="flex justify-between items-center py-4 gap-3 border-b-2 mb-4">
 
-<div *ngIf="(loading$ | async) === false && (user$ | async) as user" class="users-card-wrapper">
-    <img [src]="user.avatar" alt="{{ user.first_name }}'s avatar">
-    <h3>{{ user.first_name }} {{ user.last_name }}</h3>
+        <a class="custom-btn" [routerLink]="'/' + routes.usersPage">
+            Back
+        </a>
+
+    </div>
+
+    <div *ngIf="loading$ | async" class="text-center py-4">Loading...</div>
+
+
+    <div *ngIf="(loading$ | async) === false && (user$ | async) as user" class="flex  gap-3">
+        <img [src]="user.avatar" alt="{{ user.first_name }}'s avatar" class="rounded-lg w-[75px] h-[75] object-cover">
+        <div class="flex flex-col justify-center">
+
+            <h3 class="text-xl">{{ user.first_name }} {{ user.last_name }}</h3>
+            <a class="hover:text-green-400 transition-all duration-200" [href]="'mailto:' + user.email"
+                target="_blank">{{ user.email
+                }}</a>
+        </div>
+    </div>
 </div>

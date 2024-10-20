@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { User } from '../../models/remote/entities/user';
 import { UsersService } from '../../services/users.service';
 import { CommonModule } from '@angular/common';
+import InternalRoutes from '../../constants/internal-routes';
 
 @Component({
   selector: 'app-users',
@@ -16,7 +17,10 @@ export class UsersComponent {
 
   users$!: Observable<User[]>;
   loading$!: Observable<boolean>;
+  totalPages$!: Observable<number>;
   currentPage: number = 1;
+
+  routes = InternalRoutes;
 
   constructor(private usersService: UsersService) { }
 
@@ -24,6 +28,7 @@ export class UsersComponent {
     this.loadUsers(this.currentPage);
     this.users$ = this.usersService.users$;
     this.loading$ = this.usersService.loading$;
+    this.totalPages$ = this.usersService.totalPages$;
   }
 
   loadUsers(page: number): void {
