@@ -3,4 +3,9 @@
         go back
     </a>
 </div>
-<p>user-details works! {{this.id}}</p>
+<div *ngIf="loading$ | async">Loading...</div>
+
+<div *ngIf="(loading$ | async) === false && (user$ | async) as user" class="users-card-wrapper">
+    <img [src]="user.avatar" alt="{{ user.first_name }}'s avatar">
+    <h3>{{ user.first_name }} {{ user.last_name }}</h3>
+</div>

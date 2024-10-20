@@ -8,4 +8,20 @@
 
     <a [routerLink]="['/users', '123']">View User</a>
 
+    <div *ngIf="loading$ | async">Loading...</div>
+
+    <button (click)="previousPage()" [disabled]="currentPage === 1">Previous</button>
+    <button (click)="nextPage()">Next</button>
+
+    <div *ngIf="users$ | async as users" class="users-card-wrapper">
+        <div *ngFor="let user of users" class="user-card">
+            <a [routerLink]="['/users', user.id.toString()]">
+
+                <img [src]="user.avatar" alt="{{ user.first_name }}'s avatar">
+                <h3>{{ user.first_name }} {{ user.last_name }}</h3>
+            </a>
+        </div>
+    </div>
+
+
 </div>
