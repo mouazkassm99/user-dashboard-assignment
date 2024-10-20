@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
 import { UserDetailsResponse, UserPaginationResponse } from '../models/remote/responses/user-responses';
 import { User } from '../models/remote/entities/user';
 import RemoteUrls from '../constants/remote-urls';
@@ -36,12 +36,11 @@ export class UsersService {
       this.http.get<UserPaginationResponse>(url.toString())
         .pipe(
           tap(response => {
-            // Cache the response data by page
 
             this.usersByPage[page] = response.data;
-            // Update the BehaviorSubject with new data
+
             this.usersSubject.next(response.data);
-            this.loadingSubject.next(false); // Stop loading
+            this.loadingSubject.next(false);
           })
         )
         .subscribe();
@@ -58,17 +57,24 @@ export class UsersService {
       this.http.get<UserDetailsResponse>(url.toString())
         .pipe(
           tap(response => {
-            // Cache the response data by page
 
             this.userById[userId] = response.data;
-            // Update the BehaviorSubject with new data
+
             this.userByIdSubject.next(response.data);
             this.loadingSubject.next(false); // Stop loading
+          }),
+          catchError(error => {
+            if (error.status === 404) {
+              console.error("User not found (404)", error);
+              this.userByIdSubject.next(null);
+            } else {
+              console.error("An error occurred", error);
+            }
+            this.loadingSubject.next(false);
+            return throwError(() => error);
           })
         )
         .subscribe();
     }
   }
-
-
 }
