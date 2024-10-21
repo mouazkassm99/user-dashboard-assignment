@@ -5,8 +5,7 @@
             <button class="custom-btn" (click)="previousPage()" [disabled]="currentPage === 1">Prev</button>
 
             <span>page: {{currentPage}}</span>
-            <button class="custom-btn" (click)="nextPage()">
-                <!-- [disabled]="((totalPages$ | async)! < currentPage + 1)" -->
+            <button class="custom-btn" (click)="nextPage()" [disabled]="(totalPages! < currentPage + 1)">
                 Next
             </button>
         </div>

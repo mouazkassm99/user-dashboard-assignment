@@ -17,8 +17,8 @@ export class UsersComponent {
 
   users: User[] = [];
   loading: boolean = false;
+  totalPages: number = 0;
 
-  totalPages$: Observable<number> = of(1);
   currentPage: number = 1;
 
   routes = InternalRoutes;
@@ -32,8 +32,9 @@ export class UsersComponent {
   loadUsers(page: number): void {
     this.loading = true
     this.usersService.fetchUsers(page).subscribe({
-      next: users => {
-        this.users = users;
+      next: usersPaginatedListWithInfo => {
+        this.users = usersPaginatedListWithInfo.users;
+        this.totalPages = usersPaginatedListWithInfo.totalPages;
         this.loading = false;
       },
       error: error => {

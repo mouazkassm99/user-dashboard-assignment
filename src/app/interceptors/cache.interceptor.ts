@@ -16,10 +16,10 @@ export class CacheInterceptor implements HttpInterceptor {
     if (url.pathname.includes('/users') && url.searchParams.has('page')) {
       const page = +url.searchParams.get('page')!;
       const cachedUsers = this.cachingService.getCachedUsersByPage(page);
-      if (cachedUsers) {
+      if (cachedUsers.users) {
         // If cached, return Observable of cached response
         const cachedResponse: HttpEvent<any> = {
-          body: { data: cachedUsers } as UserPaginationResponse
+          body: { data: cachedUsers.users, total_pages: cachedUsers.totalPages } as UserPaginationResponse
         } as HttpEvent<any>;
         return of(cachedResponse);
       }

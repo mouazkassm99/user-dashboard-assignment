@@ -6,6 +6,7 @@ import { UserDetailsResponse, UserPaginationResponse } from '../models/remote/re
 import { User } from '../models/remote/entities/user';
 import RemoteUrls from '../constants/remote-urls';
 import { CachingService } from './caching.service';
+import { UsersPaginatedListWithInfo } from '../models/local/users-paginated-list-with-info';
 
 @Injectable({
   providedIn: 'root'
@@ -14,10 +15,10 @@ export class UsersService {
 
   constructor(private http: HttpClient, private cachingService: CachingService) { }
 
-  fetchUsers(page: number): Observable<User[]> {
+  fetchUsers(page: number): Observable<UsersPaginatedListWithInfo> {
 
     const cachedUsers = this.cachingService.getCachedUsersByPage(page);
-    if (cachedUsers) {
+    if (cachedUsers.users) {
       return of(cachedUsers); // Return cached data as an Observable
     }
 
@@ -25,8 +26,12 @@ export class UsersService {
     url.searchParams.set('page', page.toString());
 
     return this.http.get<UserPaginationResponse>(url.toString()).pipe(
-      map(response => response.data),
-      tap(users => this.cachingService.cacheUsersByPage(page, users))
+      map(response => ({ users: response.data, totalPages: response.total_pages })),
+      tap(userPaginationResponse => this.cachingService.cacheUsersByPage(
+        page,
+        userPaginationResponse.users,
+        userPaginationResponse.totalPages
+      ))
     );
   }
 
