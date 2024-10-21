@@ -24,12 +24,17 @@ export class UserDetailsComponent {
   }
 
   ngOnInit(): void {
-    const extractedId = this.route.snapshot.paramMap.get('id');
+    this.route.paramMap.subscribe((params) => {
 
-    if (!extractedId) {
-      throw new Error('No id was provided');
-    }
-    this.loadUserData(extractedId);
+      const extractedId = params.get('id');
+
+      if (!extractedId) {
+        throw new Error('No id was provided');
+      }
+      this.loadUserData(extractedId);
+
+    })
+
   }
 
   loadUserData(userId: string): void {
