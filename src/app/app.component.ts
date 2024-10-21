@@ -7,7 +7,13 @@ import { SearchBarComponent } from "./components/search-bar/search-bar.component
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, CommonModule, SearchBarComponent],
+  imports: [
+    RouterOutlet,
+    RouterLink,
+    RouterLinkActive,
+    CommonModule,
+    SearchBarComponent,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
