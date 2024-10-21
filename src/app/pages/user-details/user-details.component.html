@@ -9,7 +9,6 @@
 
     <div *ngIf="loading" class="text-center py-4">Loading...</div>
 
-
     <div *ngIf="!loading && user" class="flex  gap-3">
         <img [src]="user.avatar" alt="{{ user.first_name }}'s avatar" class="rounded-lg w-[75px] h-[75] object-cover">
         <div class="flex flex-col justify-center">
@@ -19,5 +18,9 @@
                 target="_blank">{{ user.email
                 }}</a>
         </div>
+    </div>
+
+    <div *ngIf="!loading && !user" class="text-center py-4">
+        User was not found
     </div>
 </div>

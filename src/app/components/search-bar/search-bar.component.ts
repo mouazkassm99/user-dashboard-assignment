@@ -22,7 +22,7 @@ export class SearchBarComponent {
 
   routes = InternalRoutes;
 
-  loading: boolean = true;
+  loading: boolean = false;
   user: User | null = null;
 
   private searchSubject = new Subject<string>();

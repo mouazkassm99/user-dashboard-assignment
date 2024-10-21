@@ -1,14 +1,22 @@
 <div class="relative" appClickOutside (clickOutside)="closeWindow()">
-    <input [(ngModel)]="searchQuery" (focus)="openWindow()" (input)="onSearch()" placeholder="Enter user ID..."
-        class="text-black" />
+    <input type="text" [(ngModel)]="searchQuery" (focus)="openWindow()" (input)="onSearch()"
+        placeholder="Enter user ID..."
+        class="peer text-black h-10 w-full rounded-md bg-gray-50 px-4 font-thin outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-green-600" />
 
     <div *ngIf="isWindowOpen"
-        class="absolute w-[400px] bg-white z-10 text-black border-2 border-black h-[100px] rounded-lg p-5">
-        <div *ngIf="loading">
+        class="absolute w-[400px] -bottom-[100px] -left-[150px] shadow-lg bg-white z-10 text-black border-2 border-green-700 h-[100px] rounded-lg p-5">
+
+
+        <div *ngIf="!searchQuery" class="text-center py-4">
+            Type Some Id
+        </div>
+
+
+        <div *ngIf="searchQuery && loading" class="text-center py-4">
             Searching...
         </div>
 
-        <div *ngIf="!loading && user">
+        <div *ngIf="searchQuery && !loading && user">
             <div class="flex gap-3 hover:bg-gray-50">
                 <a [routerLink]="[routes.usersPage, user.id]" (click)="closeWindow()">
                     <img [src]="user.avatar" alt="{{ user.first_name }}'s avatar"
@@ -25,6 +33,10 @@
                     </a>
                 </div>
             </div>
+        </div>
+
+        <div *ngIf="searchQuery && !loading && !user" class="text-center py-4">
+            No Data
         </div>
     </div>
 </div>
