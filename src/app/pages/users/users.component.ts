@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { User } from '../../models/remote/entities/user';
 import { UsersService } from '../../services/users.service';
 import { CommonModule } from '@angular/common';
@@ -9,15 +9,16 @@ import InternalRoutes from '../../constants/internal-routes';
 @Component({
   selector: 'app-users',
   standalone: true,
-  imports: [RouterLink, CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './users.component.html',
   styleUrl: './users.component.css'
 })
 export class UsersComponent {
 
-  users$!: Observable<User[]>;
-  loading$!: Observable<boolean>;
-  totalPages$!: Observable<number>;
+  users: User[] = [];
+  loading: boolean = false;
+
+  totalPages$: Observable<number> = of(1);
   currentPage: number = 1;
 
   routes = InternalRoutes;
@@ -26,13 +27,20 @@ export class UsersComponent {
 
   ngOnInit(): void {
     this.loadUsers(this.currentPage);
-    this.users$ = this.usersService.users$;
-    this.loading$ = this.usersService.loading$;
-    this.totalPages$ = this.usersService.totalPages$;
   }
 
   loadUsers(page: number): void {
-    this.usersService.fetchUsers(page);
+    this.loading = true
+    this.usersService.fetchUsers(page).subscribe({
+      next: users => {
+        this.users = users;
+        this.loading = false;
+      },
+      error: error => {
+        console.error('Error fetching users:', error);
+        this.loading = false;
+      },
+    });
   }
 
   nextPage(): void {

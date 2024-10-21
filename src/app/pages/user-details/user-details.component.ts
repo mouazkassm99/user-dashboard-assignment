@@ -1,7 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { UsersService } from '../../services/users.service';
-import { Observable } from 'rxjs';
 import { User } from '../../models/remote/entities/user';
 import { CommonModule } from '@angular/common';
 import InternalRoutes from '../../constants/internal-routes';
@@ -15,14 +14,13 @@ import InternalRoutes from '../../constants/internal-routes';
 })
 export class UserDetailsComponent {
 
-  id: string;
-  user$!: Observable<User | null>;
-  loading$!: Observable<boolean>;
+
+  loading: boolean = false;
+  user: User | null = null;
 
   routes = InternalRoutes;
 
   constructor(private route: ActivatedRoute, private usersService: UsersService) {
-    this.id = '';
   }
 
   ngOnInit(): void {
@@ -31,19 +29,23 @@ export class UserDetailsComponent {
     if (!extractedId) {
       throw new Error('No id was provided');
     }
-    this.id = extractedId;
-    this.loadUserData(this.id);
-
-    this.user$ = this.usersService.userById$;
-    this.loading$ = this.usersService.loading$;
+    this.loadUserData(extractedId);
   }
 
   loadUserData(userId: string): void {
-    this.usersService.fetchUserById(userId);
+
+    this.loading = true;
+
+    this.usersService.fetchUserById(userId)
+      .subscribe({
+        next: (user) => {
+          this.user = user;
+          this.loading = false;
+        },
+        error: (error) => {
+          this.user = null;
+          this.loading = false;
+        }
+      });
   }
-
-  ngOnDestroy(): void {
-
-  }
-
 }

@@ -4,11 +4,11 @@
 
     <div *ngIf="isWindowOpen"
         class="absolute w-[400px] bg-white z-10 text-black border-2 border-black h-[100px] rounded-lg p-5">
-        <div *ngIf="loading$ | async">
+        <div *ngIf="loading">
             Searching...
         </div>
 
-        <div *ngIf="user$ |async as user">
+        <div *ngIf="!loading && user">
             <div class="flex gap-3 hover:bg-gray-50">
                 <a [routerLink]="[routes.usersPage, user.id]" (click)="closeWindow()">
                     <img [src]="user.avatar" alt="{{ user.first_name }}'s avatar"
@@ -28,14 +28,3 @@
         </div>
     </div>
 </div>
-
-
-<!-- <div *ngIf="loading">Searching...</div>
-
-<div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
-
-
-
-<div *ngIf="user === null && !loading && !errorMessage">
-    <p>No user found with this ID.</p>
-</div> -->

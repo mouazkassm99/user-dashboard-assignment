@@ -5,14 +5,16 @@
             <button class="custom-btn" (click)="previousPage()" [disabled]="currentPage === 1">Prev</button>
 
             <span>page: {{currentPage}}</span>
-            <button class="custom-btn" (click)="nextPage()"
-                [disabled]="((totalPages$ | async)! < currentPage + 1)">Next</button>
+            <button class="custom-btn" (click)="nextPage()">
+                <!-- [disabled]="((totalPages$ | async)! < currentPage + 1)" -->
+                Next
+            </button>
         </div>
 
-        <div *ngIf="loading$ | async" class="text-center py-4">Loading...</div>
+        <div *ngIf="loading" class="text-center py-4">Loading...</div>
 
 
-        <div *ngIf="users$ | async as users" class="users-card-wrapper">
+        <div *ngIf="!loading && users" class="users-card-wrapper">
             <div *ngFor="let user of users" class="user-card">
                 <a [routerLink]="['/', routes.usersPage, user.id.toString()]" class="user-card-link">
                     <img class="user-card-img" [src]="user.avatar" alt="{{ user.first_name }}'s avatar">

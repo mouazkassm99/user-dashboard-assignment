@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { UsersService } from '../../services/users.service';
-import { debounceTime, distinctUntilChanged, Observable, Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, Observable, of, Subject } from 'rxjs';
 import { User } from '../../models/remote/entities/user';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -22,31 +22,25 @@ export class SearchBarComponent {
 
   routes = InternalRoutes;
 
-  user$!: Observable<User | null>;
-  loading$!: Observable<boolean>;
+  loading: boolean = true;
+  user: User | null = null;
 
-  errorMessage: string = '';
-
-  private searchSubject = new Subject<string>(); // Subject to handle the search input
+  private searchSubject = new Subject<string>();
 
   constructor(private usersService: UsersService) { }
 
   ngOnInit(): void {
     // Listen to the search input and debounce it
-
-    this.user$ = this.usersService.userById$;
-    this.loading$ = this.usersService.loading$;
-
     this.searchSubject.pipe(
-      debounceTime(500), // Wait for the user to stop typing for 500ms
-      distinctUntilChanged() // Only trigger if the search term changes
+      debounceTime(300),
+      distinctUntilChanged()
     ).subscribe((searchTerm: string) => {
       this.fetchUser(searchTerm);
     });
   }
 
   onSearch(): void {
-    this.searchSubject.next(this.searchQuery); // Send search input to the Subject
+    this.searchSubject.next(this.searchQuery);
   }
 
   openWindow(): void {
@@ -60,18 +54,21 @@ export class SearchBarComponent {
   fetchUser(userId: string): void {
     const trimmedUserId = userId.trim();
     if (!trimmedUserId) {
-      this.errorMessage = 'Please enter a valid User ID';
-      // this.user = null;
       return;
     }
-
-    // Reset the states
-    // this.user = null;
-    // this.loading = true;
-    // this.errorMessage = '';
+    this.loading = true;
 
     this.usersService.fetchUserById(trimmedUserId)
+      .subscribe({
+        next: (user) => {
+          this.user = user;
+          this.loading = false;
+        },
+        error: (error) => {
+          this.user = null;
+          this.loading = false;
+        }
+      });
   }
-
 
 }

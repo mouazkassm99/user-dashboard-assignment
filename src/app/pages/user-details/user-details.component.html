@@ -7,10 +7,10 @@
 
     </div>
 
-    <div *ngIf="loading$ | async" class="text-center py-4">Loading...</div>
+    <div *ngIf="loading" class="text-center py-4">Loading...</div>
 
 
-    <div *ngIf="(loading$ | async) === false && (user$ | async) as user" class="flex  gap-3">
+    <div *ngIf="!loading && user" class="flex  gap-3">
         <img [src]="user.avatar" alt="{{ user.first_name }}'s avatar" class="rounded-lg w-[75px] h-[75] object-cover">
         <div class="flex flex-col justify-center">
 
