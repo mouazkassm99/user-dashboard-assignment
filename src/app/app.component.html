@@ -1,9 +1,10 @@
 <header>
-  <nav class="bg-black/80 text-white">
+  <nav class="bg-black/80 text-white flex justify-center items-center gap-5">
     <ul class="flex items-center justify-center gap-3 py-5">
       <li><a [routerLink]="[routes.homePage]" routerLinkActive="active" ariaCurrentWhenActive="page">Home</a></li>
       <li><a [routerLink]="[routes.usersPage]" routerLinkActive="active" ariaCurrentWhenActive="page">Users</a></li>
     </ul>
+    <app-search-bar />
   </nav>
 </header>
 
